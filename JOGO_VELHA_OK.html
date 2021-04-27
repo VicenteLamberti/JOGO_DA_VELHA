@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha</title>
+
+    <style>
+
+            body
+            {
+              user-select: none;
+              background-color: antiquewhite;
+              
+
+            }
+
+            #div1
+            {
+                border-right: 1px solid #000;
+                border-bottom: 1px solid #000;
+            }
+
+            #div2
+            {
+                border-right: 1px solid #000;
+                border-bottom: 1px solid #000;
+                border-left: 1px solid #000;
+            }
+
+            #div3
+            {
+                border-left: 1px solid #000;
+                border-bottom: 1px solid #000;
+            }
+
+            #div4
+            {
+                border-right: 1px solid #000;
+                border-bottom: 1px solid #000;
+                border-top: 1px solid #000;
+            }
+
+            #div5
+            {
+                border: 1px solid #000;
+            }
+
+            #div6
+            {
+                border-left: 1px solid #000;
+                border-bottom: 1px solid #000;
+                border-top: 1px solid #000;
+            }
+
+            #div7
+            {
+                border-right: 1px solid #000;
+                border-top: 1px solid #000;
+            }
+
+            #div8
+            {
+                border-right: 1px solid #000;
+                border-top: 1px solid #000;
+                border-left: 1px solid #000;
+            }
+
+            #div9
+            {
+                border-left: 1px solid #000;
+                border-top: 1px solid #000;
+            }
+
+
+
+        .linha
+        {
+            display: flex;
+        }
+
+        .quadrante
+        {
+            
+            height: 7rem;
+            width: 7rem;
+            cursor: pointer;
+        }
+
+        .clicado
+        {
+            text-align: center;
+            line-height: 9rem;
+            font-size: xx-large;
+        }
+
+       
+
+        #btnDificuldade
+        {
+          display: none;
+        }
+
+        .tabuleiro
+        {
+          margin: auto;
+          width:fit-content;
+          height: fit-content;
+        }
+       
+       #painel
+       {
+          margin: auto;
+          width:fit-content;
+          height: fit-content;
+          padding: auto;
+       }
+
+
+     
+
+    </style>
+
+
+<script>
+  
+    
+    
+    var preenchido = []
+    var div
+    var divs
+    var nivel = 0
+    var tabuleiro = document.getElementsByClassName('quadrante')
+    var jogando = false
+    var quemComeca=0 //0 - JOGADOR, 1 - CPU
+    var eventos=false
+    
+    
+    
+    
+    
+    
+    //JOGADA JOGADOR
+    function jogadaJogador()   
+    {
+    
+        if (jogando == true)
+        {
+
+          var btnDificuldade = document.getElementById("btnDificuldade")
+          //DESAPARECER OS BOTÕES DE DIFICULDADE
+          btnDificuldade.style.display="none"
+
+          if (eventos ==false)
+          
+          {
+                for(i=1;i<10;i++)
+            {
+                div = document.getElementById("div"+i)
+                div.addEventListener("click",function()
+                {
+                
+                    
+                    if ((this.innerText == "O" || this.innerText =="X")&&(jogando==true))
+                    {
+                    alert("Essa posição já está preenchida!!!")
+                    return
+                    
+                    }else if ((this.innerText == "O" || this.innerText =="X")&&(jogando==false))
+                    {
+                    alert("O jogo acabou, começe novamente!!!")
+                    return
+                    }
+                    
+                    
+                    else if ((jogando == true)&&(nivel !=0)) 
+                    
+                    {
+                        this.innerText = "X"
+                        this.classList.add('clicado');
+                        verificaVitoria()
+                        if(jogando)
+                        {
+                            maquina()
+                        }
+                        
+                    }else
+                    {
+                        alert("O jogo acabou, começe novamente!!!")
+                    }
+                
+                    })
+                }
+            }
+          eventos = true
+          
+        }
+    }
+
+
+    //CONDICÕES VITÓRIAS
+    function verificaVitoria()
+    {
+        var resultado = document.getElementById("resultado")
+        if(div1.innerText == "X" && div2.innerText == "X" && div3.innerText =="X"
+            ||
+            div4.innerText == "X" && div5.innerText == "X" && div6.innerText =="X"
+            ||
+            div7.innerText == "X" && div8.innerText == "X" && div9.innerText =="X"
+            ||
+            div1.innerText == "X" && div4.innerText == "X" && div7.innerText =="X"
+            ||
+            div2.innerText == "X" && div5.innerText == "X" && div8.innerText =="X"
+            ||
+            div3.innerText == "X" && div6.innerText == "X" && div9.innerText =="X"
+            ||
+            div1.innerText == "X" && div5.innerText == "X" && div9.innerText =="X"
+            ||
+            div3.innerText == "X" && div5.innerText == "X" && div7.innerText =="X")
+        {
+            //VITÓRIA DE X
+            resultado.innerText = "---X GANHOU---"
+            jogando=false
+            var btnJogar = document.getElementById("btnJogar")
+            btnJogar.style.display="block"
+            
+
+            
+        }else if
+            (div1.innerText == "O" && div2.innerText == "O" && div3.innerText =="O"
+            ||
+            div4.innerText == "O" && div5.innerText == "O" && div6.innerText =="O"
+            ||
+            div7.innerText == "O" && div8.innerText == "O" && div9.innerText =="O"
+            ||
+            div1.innerText == "O" && div4.innerText == "O" && div7.innerText =="O"
+            ||
+            div2.innerText == "O" && div5.innerText == "O" && div8.innerText =="O"
+            ||
+            div3.innerText == "O" && div6.innerText == "O" && div9.innerText =="O"
+            ||
+            div1.innerText == "O" && div5.innerText == "O" && div9.innerText =="O"
+            ||
+            div3.innerText == "O" && div5.innerText == "O" && div7.innerText =="O")
+        {
+            //VITÓRIA DE O
+            resultado.innerText = "---O GANHOU---"
+            jogando=false
+            var btnJogar = document.getElementById("btnJogar")
+            btnJogar.style.display="block"
+            
+
+        
+        }else if
+            (div1.innerText != "" && div2.innerText != "" && div3.innerText != ""
+            &&
+            div4.innerText != "" && div5.innerText != "" && div6.innerText != ""
+            &&
+            div7.innerText != "" && div8.innerText != "" && div9.innerText != "")
+            
+            
+
+        {
+            resultado.innerText = "---EMPATE---"
+            jogando=false
+            var btnJogar = document.getElementById("btnJogar")
+            btnJogar.style.display="block"
+        }
+            
+            
+    }
+
+
+    //ESSE É A MINHA FUNÇÃO DA JOGADA CPU , NÃO FOI POSSIVEL APLICAR
+    /*function maquina()
+    {
+        var aleatorio = Math.random()*9
+        var aleatoriocima=Math.ceil(aleatorio)
+        
+        for (i=1;i<10;i+=aleatoriocima)
+        {
+                
+                if (i > 9)
+                {
+                    continue;
+                }
+                divs = document.getElementById("div"+i)
+                if (divs.innerText != "")
+                {
+                               
+                }   else
+                    {
+                divs.innerText = "O"
+                divs.classList.add('clicado');
+                break
+                
+                    }
+
+        }*/
+
+
+    function maquina()
+    {   
+      if (nivel ==1) //NÍVEL FÁCIL ALEATÓRIO
+      {
+        var divs = document.getElementsByClassName('quadrante');
+        var completo = true;
+        for(var current of divs)
+        {
+          if(current.innerText != 'X' && current.innerText != 'O')
+          {
+              completo = false;
+              break;
+          }
+        }
+        if(completo)
+        return
+        while(true)
+        {
+          var num = Math.ceil(Math.random()*9);
+          var elemento = document.getElementById('div'+num);
+          if(elemento.innerText == '')
+          {
+            elemento.innerText = "O"
+            elemento.classList.add('clicado');
+            verificaVitoria()
+            break;
+          }
+        }
+        
+        
+        
+        
+        
+        }else if(nivel ==2) //NÍVEL MÉDIO - DEFESA E ALEATÓRIO
+        {
+          var quadrados = document.getElementsByClassName("quadrante")
+          if((quadrados[0].innerText =="X")&&(quadrados[1].innerText =="X") && (quadrados[2].innerText==""))
+          {
+            quadrados[2].innerText = "O"
+            quadrados[2].classList.add('clicado')
+
+          }else if ((quadrados[0].innerText =="X")&&(quadrados[1].innerText =="") && (quadrados[2].innerText=="X"))
+            {
+              quadrados[1].innerText = "O"
+              quadrados[1].classList.add('clicado')
+
+            }else if ((quadrados[0].innerText =="")&&(quadrados[1].innerText =="X") && (quadrados[2].innerText=="X"))
+            {
+              quadrados[0].innerText = "O"
+              quadrados[0].classList.add('clicado')
+            }
+            
+            else // LINHA 2
+
+            if((quadrados[3].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[5].innerText==""))
+            {
+              quadrados[5].innerText = "O"
+              quadrados[5].classList.add('clicado')
+
+            }else if ((quadrados[3].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[5].innerText=="X"))
+            {
+              quadrados[4].innerText = "O"
+              quadrados[4].classList.add('clicado')
+            }else if ((quadrados[3].innerText =="")&&(quadrados[4].innerText =="X") && (quadrados[5].innerText=="X"))
+            {
+              quadrados[3].innerText = "O"
+              quadrados[3].classList.add('clicado')
+            }
+
+            
+            else //LINHA 3
+
+            if ((quadrados[6].innerText =="X")&&(quadrados[7].innerText =="X") && (quadrados[8].innerText==""))
+            {
+              quadrados[8].innerText = "O"
+              quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[6].innerText =="X")&&(quadrados[7].innerText =="") && (quadrados[8].innerText=="X"))
+            {
+              quadrados[7].innerText = "O"
+              quadrados[7].classList.add('clicado')
+
+            } else if ((quadrados[6].innerText =="")&&(quadrados[7].innerText =="X") && (quadrados[8].innerText=="X"))
+            {
+              quadrados[6].innerText = "O"
+              quadrados[6].classList.add('clicado')
+            }
+            
+            else //DIAGONAL 1
+
+            if ((quadrados[0].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+            } else if ((quadrados[0].innerText =="")&&(quadrados[4].innerText =="X") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+
+            else //DIAGONAL 2
+
+            if((quadrados[2].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[6].innerText==""))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+            } else if ((quadrados[2].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+            } else if ((quadrados[2].innerText =="")&&(quadrados[4].innerText =="X") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+              }
+
+            else //COLUNA 1
+
+            if ((quadrados[0].innerText =="X")&&(quadrados[3].innerText =="X") && (quadrados[6].innerText==""))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="X")&&(quadrados[3].innerText =="") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[3].innerText = "O"
+                quadrados[3].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="")&&(quadrados[3].innerText =="X") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+
+            else //COLUNA 2
+
+            if ((quadrados[1].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[7].innerText==""))
+            {
+                quadrados[7].innerText = "O"
+                quadrados[7].classList.add('clicado')
+
+            } else if ((quadrados[1].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[7].innerText=="X"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            } else if ((quadrados[1].innerText =="")&&(quadrados[3].innerText =="X") && (quadrados[7].innerText=="X"))
+              {
+                quadrados[1].innerText = "O"
+                quadrados[1].classList.add('clicado')
+              }
+
+            else // COLUNA 3
+
+            if ((quadrados[2].innerText =="X")&&(quadrados[5].innerText =="X") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[2].innerText =="X")&&(quadrados[5].innerText =="") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[5].innerText = "O"
+                quadrados[5].classList.add('clicado')
+            } else if ((quadrados[2].innerText =="")&&(quadrados[5].innerText =="X") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+              }
+              
+              
+            else //ALEATÓRIO
+
+            {
+                var divs = document.getElementsByClassName('quadrante');
+                var completo = true;
+                for(var current of divs)
+                {
+                    if(current.innerText != 'X' && current.innerText != 'O')
+                    {
+                        completo = false;
+                        break;
+                    }
+                }
+                if(completo)
+                return;
+
+                while(true)
+                {
+                    var num = Math.ceil(Math.random()*9);
+                    var elemento = document.getElementById('div'+num);
+                    if(elemento.innerText == '')
+                    {
+                        elemento.innerText = "O"
+                        elemento.classList.add('clicado');
+                        
+                        break;
+                    }
+                }
+                verificaVitoria()
+            }
+            
+        }
+
+        
+        else if (nivel ==3) //NÍVEL DIFÍCIL - ATAQUE, DEFESA E ALEATÓRIO
+        {
+            
+            var quadrados = document.getElementsByClassName("quadrante")
+
+
+            //ATAQUE UMA POSIÇÃO VAZIA
+            
+             if((quadrados[0].innerText =="O")&&(quadrados[1].innerText =="O") && (quadrados[2].innerText==""))
+            {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="O")&&(quadrados[1].innerText =="") && (quadrados[2].innerText=="O"))
+              {
+                quadrados[1].innerText = "O"
+                quadrados[1].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="")&&(quadrados[1].innerText =="O") && (quadrados[2].innerText=="O"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+            
+            else // LINHA 2
+
+            if((quadrados[3].innerText =="O")&&(quadrados[4].innerText =="O") && (quadrados[5].innerText==""))
+            {
+                quadrados[5].innerText = "O"
+                quadrados[5].classList.add('clicado')
+
+            } else if ((quadrados[3].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[5].innerText=="O"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            } else if ((quadrados[3].innerText =="")&&(quadrados[4].innerText =="O") && (quadrados[5].innerText=="O"))
+              {
+                quadrados[3].innerText = "O"
+                quadrados[3].classList.add('clicado')
+              }
+
+            
+            else //LINHA 3
+
+            if ((quadrados[6].innerText =="O")&&(quadrados[7].innerText =="O") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[6].innerText =="O")&&(quadrados[7].innerText =="") && (quadrados[8].innerText=="O"))
+              {
+                quadrados[7].innerText = "O"
+                quadrados[7].classList.add('clicado')
+
+            } else if ((quadrados[6].innerText =="")&&(quadrados[7].innerText =="O") && (quadrados[8].innerText=="O"))
+              {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+              }
+            
+            else //DIAGONAL 1
+
+            if ((quadrados[0].innerText =="O")&&(quadrados[4].innerText =="O") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[8].innerText=="O"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="")&&(quadrados[4].innerText =="O") && (quadrados[8].innerText=="O"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+
+            else //DIAGONAL 2
+
+            if((quadrados[2].innerText =="O")&&(quadrados[4].innerText =="O") && (quadrados[6].innerText==""))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+            } else if ((quadrados[2].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[6].innerText=="O"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            } else if ((quadrados[2].innerText =="")&&(quadrados[4].innerText =="O") && (quadrados[6].innerText=="O"))
+              {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+              }
+
+            else //COLUNA 1
+
+            if ((quadrados[0].innerText =="O")&&(quadrados[3].innerText =="O") && (quadrados[6].innerText==""))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="O")&&(quadrados[3].innerText =="") && (quadrados[6].innerText=="O"))
+              {
+                quadrados[3].innerText = "O"
+                quadrados[3].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="")&&(quadrados[3].innerText =="O") && (quadrados[6].innerText=="O"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+
+            else //COLUNA 2
+
+            if ((quadrados[1].innerText =="O")&&(quadrados[4].innerText =="O") && (quadrados[7].innerText==""))
+            {
+                quadrados[7].innerText = "O"
+                quadrados[7].classList.add('clicado')
+
+            } else if ((quadrados[1].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[7].innerText=="O"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            } else if ((quadrados[1].innerText =="")&&(quadrados[3].innerText =="O") && (quadrados[7].innerText=="O"))
+              {
+                quadrados[1].innerText = "O"
+                quadrados[1].classList.add('clicado')
+              }
+
+            else // COLUNA 3
+
+            if ((quadrados[2].innerText =="O")&&(quadrados[5].innerText =="O") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[2].innerText =="O")&&(quadrados[5].innerText =="") && (quadrados[8].innerText=="O"))
+              {
+                quadrados[5].innerText = "O"
+                quadrados[5].classList.add('clicado')
+            } else if ((quadrados[2].innerText =="")&&(quadrados[5].innerText =="O") && (quadrados[8].innerText=="O"))
+              {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+              }
+              else
+
+            //DEFESA
+            
+            if((quadrados[0].innerText =="X")&&(quadrados[1].innerText =="X") && (quadrados[2].innerText==""))
+            {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="X")&&(quadrados[1].innerText =="") && (quadrados[2].innerText=="X"))
+              {
+                quadrados[1].innerText = "O"
+                quadrados[1].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="")&&(quadrados[1].innerText =="X") && (quadrados[2].innerText=="X"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+            
+            else // LINHA 2
+
+            if((quadrados[3].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[5].innerText==""))
+            {
+                quadrados[5].innerText = "O"
+                quadrados[5].classList.add('clicado')
+
+            } else if ((quadrados[3].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[5].innerText=="X"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            } else if ((quadrados[3].innerText =="")&&(quadrados[4].innerText =="X") && (quadrados[5].innerText=="X"))
+              {
+                quadrados[3].innerText = "O"
+                quadrados[3].classList.add('clicado')
+              }
+
+            
+            else //LINHA 3
+
+            if ((quadrados[6].innerText =="X")&&(quadrados[7].innerText =="X") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[6].innerText =="X")&&(quadrados[7].innerText =="") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[7].innerText = "O"
+                quadrados[7].classList.add('clicado')
+
+            } else if ((quadrados[6].innerText =="")&&(quadrados[7].innerText =="X") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+              }
+            
+            else //DIAGONAL 1
+
+            if ((quadrados[0].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+            } else if ((quadrados[0].innerText =="")&&(quadrados[4].innerText =="X") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+
+            else //DIAGONAL 2
+
+            if((quadrados[2].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[6].innerText==""))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+            } else if ((quadrados[2].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+            } else if ((quadrados[2].innerText =="")&&(quadrados[4].innerText =="X") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+              }
+
+            else //COLUNA 1
+
+            if ((quadrados[0].innerText =="X")&&(quadrados[3].innerText =="X") && (quadrados[6].innerText==""))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="X")&&(quadrados[3].innerText =="") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[3].innerText = "O"
+                quadrados[3].classList.add('clicado')
+
+            } else if ((quadrados[0].innerText =="")&&(quadrados[3].innerText =="X") && (quadrados[6].innerText=="X"))
+              {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+              }
+
+            else //COLUNA 2
+
+            if ((quadrados[1].innerText =="X")&&(quadrados[4].innerText =="X") && (quadrados[7].innerText==""))
+            {
+                quadrados[7].innerText = "O"
+                quadrados[7].classList.add('clicado')
+
+            } else if ((quadrados[1].innerText =="X")&&(quadrados[4].innerText =="") && (quadrados[7].innerText=="X"))
+              {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            } else if ((quadrados[1].innerText =="")&&(quadrados[3].innerText =="X") && (quadrados[7].innerText=="X"))
+              {
+                quadrados[1].innerText = "O"
+                quadrados[1].classList.add('clicado')
+              }
+
+            else // COLUNA 3
+
+            if ((quadrados[2].innerText =="X")&&(quadrados[5].innerText =="X") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            } else if ((quadrados[2].innerText =="X")&&(quadrados[5].innerText =="") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[5].innerText = "O"
+                quadrados[5].classList.add('clicado')
+            } else if ((quadrados[2].innerText =="")&&(quadrados[5].innerText =="X") && (quadrados[8].innerText=="X"))
+              {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+              }
+
+
+
+
+            //ATAQUE SE TIVER DOIS LUGARES VAZIOS
+            //LINHA 1
+
+            else if((quadrados[0].innerText =="O")&&(quadrados[1].innerText =="") && (quadrados[2].innerText==""))
+            {
+                quadrados[1].innerText = "O"
+                quadrados[1].classList.add('clicado')
+
+            }else if((quadrados[0].innerText =="")&&(quadrados[1].innerText =="O") && (quadrados[2].innerText==""))
+            {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+
+            }else if((quadrados[0].innerText =="")&&(quadrados[1].innerText =="") && (quadrados[2].innerText=="O"))
+            {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+
+
+
+            //LINHA 2
+            }else if((quadrados[3].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[5].innerText==""))
+            {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            }else if((quadrados[3].innerText =="")&&(quadrados[4].innerText =="O") && (quadrados[5].innerText==""))
+            {
+                quadrados[5].innerText = "O"
+                quadrados[5].classList.add('clicado')
+
+            }else if((quadrados[3].innerText =="")&&(quadrados[4].innerText =="") && (quadrados[5].innerText=="O"))
+            {
+                quadrados[3].innerText = "O"
+                quadrados[3].classList.add('clicado')
+
+
+
+
+            //LINHA 3
+            }else if((quadrados[6].innerText =="O")&&(quadrados[7].innerText =="") && (quadrados[8].innerText==""))
+            {
+                quadrados[7].innerText = "O"
+                quadrados[7].classList.add('clicado')
+
+            }else if((quadrados[6].innerText =="")&&(quadrados[7].innerText =="O") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            }else if((quadrados[6].innerText =="")&&(quadrados[7].innerText =="") && (quadrados[8].innerText=="O"))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+
+
+            //COLUNA 1
+            }else if((quadrados[0].innerText =="O")&&(quadrados[3].innerText =="") && (quadrados[6].innerText==""))
+            {
+                quadrados[3].innerText = "O"
+                quadrados[3].classList.add('clicado')
+
+            }else if((quadrados[0].innerText =="")&&(quadrados[3].innerText =="O") && (quadrados[6].innerText==""))
+            {
+                quadrados[6].innerText = "O"
+                quadrados[6].classList.add('clicado')
+
+            }else if((quadrados[0].innerText =="")&&(quadrados[3].innerText =="") && (quadrados[6].innerText=="O"))
+            {
+                quadrados[0].innerText = "O"
+                quadrados[0].classList.add('clicado')
+
+
+
+
+            //COLUNA 2
+            }else if((quadrados[1].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[7].innerText==""))
+            {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            }else if((quadrados[1].innerText =="")&&(quadrados[4].innerText =="O") && (quadrados[7].innerText==""))
+            {
+                quadrados[7].innerText = "O"
+                quadrados[7].classList.add('clicado')
+
+            }else if((quadrados[1].innerText =="")&&(quadrados[4].innerText =="") && (quadrados[7].innerText=="O"))
+            {
+                quadrados[1].innerText = "O"
+                quadrados[1].classList.add('clicado')
+
+
+
+
+            //COLUNA 3
+            }else if((quadrados[2].innerText =="O")&&(quadrados[5].innerText =="") && (quadrados[8].innerText==""))
+            {
+                quadrados[5].innerText = "O"
+                quadrados[5].classList.add('clicado')
+
+            }else if((quadrados[2].innerText =="")&&(quadrados[5].innerText =="O") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+            }else if((quadrados[2].innerText =="")&&(quadrados[5].innerText =="") && (quadrados[8].innerText=="O"))
+            {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+
+
+
+
+            //DIAGONAL 1
+            }else if((quadrados[0].innerText =="")&&(quadrados[4].innerText =="") && (quadrados[8].innerText=="O"))
+            {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+
+
+            }else if((quadrados[0].innerText =="")&&(quadrados[4].innerText =="O") && (quadrados[8].innerText==""))
+            {
+                quadrados[8].innerText = "O"
+                quadrados[8].classList.add('clicado')
+
+
+
+            }else if((quadrados[0].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[8].innerText==""))
+            {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+
+
+            
+            //DIAGONAL 2
+            }else if((quadrados[2].innerText =="")&&(quadrados[4].innerText =="") && (quadrados[6].innerText=="O"))
+            {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+
+
+            }else if((quadrados[2].innerText =="")&&(quadrados[4].innerText =="O") && (quadrados[6].innerText==""))
+            {
+                quadrados[2].innerText = "O"
+                quadrados[2].classList.add('clicado')
+
+
+
+            }else if((quadrados[2].innerText =="O")&&(quadrados[4].innerText =="") && (quadrados[6].innerText==""))
+            {
+                quadrados[4].innerText = "O"
+                quadrados[4].classList.add('clicado')
+
+            }
+
+            
+            else // ALEATÓRIO
+
+            {
+                var divs = document.getElementsByClassName('quadrante');
+                var completo = true;
+                for(var current of divs)
+                {
+                    if(current.innerText != 'X' && current.innerText != 'O')
+                    {
+                        completo = false;
+                        break;
+                    }
+                }
+                if(completo)
+                return;
+
+                while(true)
+                {
+                    var num = Math.ceil(Math.random()*9);
+                    var elemento = document.getElementById('div'+num);
+                    if(elemento.innerText == '')
+                    {
+                        elemento.innerText = "O"
+                        elemento.classList.add('clicado');
+                        
+                        break;
+                    }
+                }
+            }
+            verificaVitoria()
+        }
+    }
+        
+
+
+
+    function jogar()
+    {
+      // 
+      var divQuemComeca = document.getElementById("quemcomeca")
+      
+      if(quemComeca ==0)
+      {
+        divQuemComeca.innerText="Quem comeca: Jogador"
+        quemComeca=1
+        
+      }else if(quemComeca==1)
+      {
+        divQuemComeca.innerText="Quem comeca: CPU"
+        quemComeca=0
+              
+        
+      }
+      
+
+      var btnJogar = document.getElementById("btnJogar")
+      var btnDificuldade = document.getElementById("btnDificuldade")
+      
+      nivel =0
+      jogando = true
+      //DESAPARECER O GANHADOR
+      var resultado = document.getElementById("resultado")
+      resultado.innerText=""
+      
+
+      //APARECER OS BOTÕES DE DIFICULDADE
+      btnDificuldade.style.display="block"
+      
+
+      
+      //LIMPAR TABULEIRO
+      for(i=0;i<9;i++)
+      {
+          
+        tabuleiro[i].innerText=""
+      }
+      
+    }
+
+    
+    
+    
+    function level(dificuldade)
+    {
+        
+         //LIMPAR TABULEIRO
+      for(i=0;i<9;i++)
+      {
+          
+        tabuleiro[i].innerText=""
+      }
+        nivel=dificuldade
+        if(quemComeca==0)
+        {
+            maquina()
+        }else if(quemComeca=1)
+        {
+            jogadaJogador()
+        }
+        
+        
+        //DESAPARECER OS BOTÕES DE DIFICULDADE E BOTÃO DE JOGAR
+        
+        var btnDificuldade = document.getElementById("btnDificuldade")
+        var btnJogar = document.getElementById("btnJogar")
+        btnJogar.style.display="none"
+        btnDificuldade.style.display="none"
+
+        
+        
+      
+
+        
+    }
+
+
+
+    
+
+</script>
+
+
+</head>
+<body>
+    <div div = "tabuleiro" class = "tabuleiro">
+        <div class = "linha">
+          <div id="div1" class = "quadrante"></div> <div id="div2" class = "quadrante"></div> <div id="div3" class = "quadrante"></div>
+        </div>
+    
+        <div class = "linha">
+          <div id="div4" class = "quadrante"></div> <div id="div5" class = "quadrante"></div> <div id="div6" class = "quadrante"></div>
+        </div>
+    
+        <div class = "linha">
+          <div id="div7" class = "quadrante"></div> <div id="div8" class = "quadrante"></div> <div id="div9" class = "quadrante"></div>
+        </div>
+    </div>
+    
+    <div id = "painel">
+      <div 
+        id="quemcomeca">Quem começa:
+      </div>
+
+      <div>
+        <button id="btnJogar" onclick="jogar()">JOGAR</button>
+      </div>
+
+      <div id = "btnDificuldade" >
+        <button onclick="level(1)">FÁCIL</button>
+        <button onclick="level(2)">MÉDIO</button>
+        <button onclick="level(3)">DIFÍCIL</button>  
+      </div>
+
+      <div id="resultado"></div>
+    </div>
+    
+    
+   
+    
+    
+   
+    
+</body>
+</html>
